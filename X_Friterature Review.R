@@ -86,7 +86,7 @@ Done <-
   LitReview %>% #slice(1:100) %>% 
   dplyr::select(Article_Title, DOI)
 
-LitReview2 <- #LitReview
+LitReview-1 <- #LitReview
   gsheet2tbl("AgeingNewLitReview.html or whatever")
 
 LitReview2 %>% 
@@ -114,4 +114,22 @@ Maybes %>%
   # paste(sep = "\n\n") %>% 
   dplyr::select(Output) %>% 
   write_delim("Abstracts.txt")
+
+#Cross referencing parasite types with initial filter ####
+
+LitReview2 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/19iy1VxbECUiWeBVj2mEpFNczjnI9bSOfaexgs0WfEDM/edit?usp=sharing")
+
+LitReview2 %<>% rename_all(~.x %>% str_trim %>% str_replace_all(" ", "_"))
+
+LitReview2 %>% 
+  dplyr::select(Article_Title, DOI) %>% 
+  is.na %>% colSums()
+
+LitReview2$Article_Title %>% table %>% table
+
+New <- 
+  LitReview2 %>%
+  dplyr::select(Article_Title, DOI)
+
+Integrated <- LitReview2 %>% anti_join(Done, by = c("DOI"))
 
