@@ -133,3 +133,24 @@ New <-
 
 Integrated <- LitReview2 %>% anti_join(Done, by = c("DOI"))
 
+# Combining the two initial senescence searches ####
+
+SenescenceResults1 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/15XXz_ZfBm-qEc39RDxQvJDyQ2iJ8xXSiMhK6hIijwK0/edit#gid=235659555")
+
+SenescenceResults2 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/15XXz_ZfBm-qEc39RDxQvJDyQ2iJ8xXSiMhK6hIijwK0/edit#gid=23140384")
+
+SenescenceDF <- 
+  SenescenceResults1 %>% 
+  bind_rows(SenescenceResults2) %>% 
+  data.frame
+
+SenescenceDF$Age.Categorization %>% table
+
+SenescenceDF$YNM %>% table
+
+SenescenceDF %>% filter(YNM == "Y") %>% 
+  pull(Publication.Year) %>% qplot
+
+# Looking at reasons for exclusion ####
+
+
