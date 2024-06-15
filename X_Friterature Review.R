@@ -151,6 +151,24 @@ SenescenceDF$YNM %>% table
 SenescenceDF %>% filter(YNM == "Y") %>% 
   pull(Publication.Year) %>% qplot
 
-# Looking at reasons for exclusion ####
+#Cross referencing age with sensec searches ####
 
+LitReview3 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/15XXz_ZfBm-qEc39RDxQvJDyQ2iJ8xXSiMhK6hIijwK0/edit?gid=1506073965#gid=1506073965")
+
+LitReview3 %<>% rename_all(~.x %>% str_trim %>% str_replace_all(" ", "_"))
+
+LitReview3 %>% 
+  dplyr::select(Article_Title, DOI) %>% 
+  is.na %>% colSums()
+
+LitReview3$Article_Title %>% table %>% table
+
+New2 <- 
+  LitReview3 %>%
+  dplyr::select(Article_Title, DOI)
+
+Integrated2 <- LitReview3 %>% anti_join(SenescenceDF, by = c("DOI"))
+
+library("readr")
+write.csv(Integrated2,"age.csv")
 
